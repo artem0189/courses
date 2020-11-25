@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import by.bsuir.controller.JspPageName;
 import by.bsuir.controller.command.Command;
 
-public class GoToLogInPageCommand implements Command {
-	private static final String PARAMETER_COMMAND = "command";
+public class GoToLogInPageCommand extends Command {
+	public GoToLogInPageCommand() {
+		super(false, true);
+	}
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect(request.getContextPath() + "/controller?" + PARAMETER_COMMAND + "=" + );
-		//RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.LOGIN_PAGE);
-		//dispatcher.forward(request, response);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.LOGIN_PAGE);
+		dispatcher.forward(request, response);
 	}
 }

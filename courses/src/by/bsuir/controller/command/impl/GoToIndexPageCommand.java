@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import by.bsuir.controller.JspPageName;
 import by.bsuir.controller.command.Command;
 
-public class GoToMainPageCommand extends Command {
-	public GoToMainPageCommand() {
+public class GoToIndexPageCommand extends Command {
+	public GoToIndexPageCommand() {
 		super(true, false);
 	}
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.MAIN_PAGE);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.INDEX_PAGE);
 		dispatcher.forward(request, response);
 	}
 }

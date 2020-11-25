@@ -10,7 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import by.bsuir.controller.JspPageName;
 import by.bsuir.controller.command.Command;
 
-public class GoToRegistrationPageCommand implements Command {
+public class GoToRegistrationPageCommand extends Command {
+	public GoToRegistrationPageCommand() {
+		super(false, true);
+	}
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher(JspPageName.REGISTRATION_PAGE);

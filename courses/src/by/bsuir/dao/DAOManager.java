@@ -7,7 +7,7 @@ public class DAOManager {
 	private static final DAOManager instance = new DAOManager();
 	
 	private static final String driverName = "com.mysql.cj.jdbc.Driver";
-	private static final String url = "jdbc:mysql://localhost:3306/test?serverTimezone=Europe/Minsk&useSSL=false";
+	private static final String url = "jdbc:mysql://localhost:3306/courses?serverTimezone=Europe/Minsk&useSSL=false";
 	private static final String user = "root";
 	private static final String password = "root";
 	

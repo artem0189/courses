@@ -8,13 +8,17 @@ import java.sql.PreparedStatement;
 import by.bsuir.dao.UserDAO;
 import by.bsuir.dao.DAOException;
 import by.bsuir.dao.DAOManager;
+import by.bsuir.dao.util.SHA256Hasher;
 import by.bsuir.entity.User;
+import by.bsuir.entity.UserData;
 
 public class SQLUserDAO implements UserDAO{
 	private static Connection connection = DAOManager.getConnection();
 	
 	private static final String AUTHENTIFICATION_QUERY =
 			"SELECT * FROM users WHERE username = ? AND password = ?";
+	private static final String REGISTRATION_QUERY = 
+			"INSERT INTO users(username, password, name, surname) VALUES(?, ?, ?, ?)";
 	
 	@Override
 	public User authentification(String login, String password) throws DAOException {
@@ -24,17 +28,37 @@ public class SQLUserDAO implements UserDAO{
 		try {
 			preparedStatement = connection.prepareStatement(AUTHENTIFICATION_QUERY);
 			preparedStatement.setString(1, login);
-			preparedStatement.setString(2, password);
+			preparedStatement.setString(2, SHA256Hasher.hash(password));
 			result = preparedStatement.executeQuery();
 			if (result.next()) {
 				user = new User();
 				user.setId(result.getInt("id"));
 				user.setUsername(result.getString("username"));
+				user.setName(result.getString("name"));
+				user.setSurname(result.getString("surname"));
+				user.setRoleId(result.getInt("roleId"));
 			}
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		}
 		
 		return user;
+	}
+	
+	@Override
+	public boolean registration(UserData userData) throws DAOException {
+		PreparedStatement preparedStatement = null;
+		int result = 0;
+		try {
+			preparedStatement = connection.prepareStatement(REGISTRATION_QUERY);
+			preparedStatement.setString(1, userData.getUsername());
+			preparedStatement.setString(2, SHA256Hasher.hash(userData.getPassword()));
+			preparedStatement.setString(3, userData.getName());
+			preparedStatement.setString(4, userData.getSurname());
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
+		return result != 0;
 	}
 }

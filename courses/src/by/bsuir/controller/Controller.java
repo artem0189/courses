@@ -11,7 +11,9 @@ import by.bsuir.controller.command.Command;
 import by.bsuir.controller.command.CommandProvider;
 
 public class Controller extends HttpServlet {
-	private final static String PARAMETER_COMMAND = "command";
+	private static final long serialVersionUID = 1L;
+	
+	private static final String PARAMETER_COMMAND = "command";
 	private final CommandProvider provider = new CommandProvider();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,7 +26,7 @@ public class Controller extends HttpServlet {
 	
 	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String commandName = request.getParameter(PARAMETER_COMMAND);
-		Command command = provider.getCommand(commandName);
+		Command command = provider.getCommand(commandName);	
 		command.execute(request, response);
 	}
 }

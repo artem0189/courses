@@ -9,10 +9,5 @@
 </head>
 <body>
 	<h1>Main page</h1>
-	<a href="controller?command=go_to_login">Login</a>
-	
-	<c:if test="${sessionScope.user != null}">
-		<a href="controller?command=logout">Logout</a>
-	</c:if>
 </body>
 </html>

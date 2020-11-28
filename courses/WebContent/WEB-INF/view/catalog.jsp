@@ -8,14 +8,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>Main page</h1>
-	<c:choose>
-		<c:when test="${sessionScope.user == null}">
-			<a href="login">Login</a>
-		</c:when>
-		<c:otherwise>
-			<a href="?command=logout">Logout</a>
-		</c:otherwise>
-	</c:choose>
+	<h1>Catalog page</h1>
+	<c:forEach var="course" items="${requestScope.courses}">
+		<h1><c:out value="${course.title}" /></h1>
+		<p><c:out value="${course.description}" /></p>
+		<p><c:out value="${course.teacher.username}" /></p>
+	</c:forEach>
 </body>
 </html>

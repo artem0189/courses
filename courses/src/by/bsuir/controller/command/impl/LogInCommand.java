@@ -7,21 +7,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.bsuir.controller.JspPageName;
-import by.bsuir.controller.command.CommandName;
+import by.bsuir.controller.ControllerName;
 import by.bsuir.controller.command.Command;
-import by.bsuir.service.ServiceProvider;
-import by.bsuir.service.ClientService;
 import by.bsuir.entity.User;
+import by.bsuir.service.ClientService;
 import by.bsuir.service.ServiceException;
+import by.bsuir.service.ServiceProvider;
 
-public class LogInCommand extends Command {
-	private static final String PARAMETER_LOGIN = "login";
+public class LoginCommand implements Command {
+	private static final LoginCommand instance = new LoginCommand();
+	
+	private static final String PARAMETER_LOGIN = "username";
 	private static final String PARAMETER_PASSWORD = "password";
 	
-	public LogInCommand() {
-		super(false, true);
-	}
-
+	private LoginCommand() {};
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String login = request.getParameter(PARAMETER_LOGIN);
@@ -38,11 +38,15 @@ public class LogInCommand extends Command {
 				request.getRequestDispatcher(JspPageName.LOGIN_PAGE).forward(request, response);
 			} else {
 				request.getSession().setAttribute("user", user);
-				response.sendRedirect(request.getRequestURL() + "?command=" + CommandName.GO_TO_MAIN_COMMAND);
+				response.sendRedirect(request.getContextPath() + ControllerName.MAIN_CONTROLLER_NAME);
 			}
 		} catch (ServiceException e) {
 			request.setAttribute("error", e.getMessage());
 			request.getRequestDispatcher(JspPageName.LOGIN_PAGE).forward(request, response);
 		}
+	}
+	
+	public static LoginCommand getInstance() {
+		return instance;
 	}
 }

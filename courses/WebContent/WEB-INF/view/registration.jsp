@@ -8,18 +8,18 @@
 <title>Registration</title>
 </head>
 <body>
-	<form action="controller" method="post">
+	<form action="registration" method="post">
 	<input type="hidden" name="command" value="registration">
 		<h1><c:out value = "${requestScope.error}"/></h1>
 		<br>
-		Enter login:
-		<input type="text" name="username" value="" /> <br /> 
+		Enter username:
+		<input type="text" name="username" required="required" /> <br /> 
 		Enter password:
-		<input type="password" name="password" value="" /> <br />
+		<input type="password" name="password" required="required" /> <br />
 		Enter name:
-		<input type="text" name="name" value="" /> <br /> 
+		<input type="text" name="name" required="required" /> <br /> 
 		Enter surname:
-		<input type="text" name="surname" value="" /> <br /> 
+		<input type="text" name="surname" required="required" /> <br /> 
 		<input type="submit" name="submit" value="press me" />
 	</form>
 </body>

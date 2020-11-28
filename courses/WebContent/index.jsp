@@ -8,6 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<c:redirect url="controller?command=go_to_main" />
+	<c:redirect url="/main" />
 </body>
 </html>

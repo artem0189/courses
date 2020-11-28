@@ -8,12 +8,12 @@
 <title>Login</title>
 </head>
 <body>
-	<form action="controller" method="post">
+	<form action="login" method="post">
 		<input type="hidden" name="command" value="login">
 
 		<a>	
-			Login: 	<input type="text" name="login" value="" /> <br> 
-			Password: <input type="password" name="password" value="" /> <br> 
+			Username: <input type="text" name="username" required="required" /> <br> 
+			Password: <input type="password" name="password" required="required" /> <br> 
 			<input type="submit" name="submit" value="Login" id="button" />
 		</a>
 	</form>

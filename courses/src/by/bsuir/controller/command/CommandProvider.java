@@ -3,28 +3,49 @@ package by.bsuir.controller.command;
 import java.util.Map;
 import java.util.HashMap;
 
-import by.bsuir.controller.command.impl.GoToIndexPageCommand;
-import by.bsuir.controller.command.impl.GoToMainPageCommand;
-import by.bsuir.controller.command.impl.GoToLogInPageCommand;
-import by.bsuir.controller.command.impl.GoToRegistrationPageCommand;
-import by.bsuir.controller.command.impl.LogInCommand;
-import by.bsuir.controller.command.impl.LogOutCommand;
+import by.bsuir.controller.ControllerName;
+import by.bsuir.controller.command.impl.LoginCommand;
+import by.bsuir.controller.command.impl.LogoutCommand;
 import by.bsuir.controller.command.impl.RegistrationCommand;
+import by.bsuir.controller.command.impl.GetCoursesCommand;
 
 public class CommandProvider {
-	private Map<String, Command> commands = new HashMap<String, Command>();
+	private static final CommandProvider instance = new CommandProvider();
 	
-	public CommandProvider() {
-		commands.put(CommandName.GO_TO_INDEX_COMMAND, new GoToIndexPageCommand());
-		commands.put(CommandName.GO_TO_MAIN_COMMAND, new GoToMainPageCommand());
-		commands.put(CommandName.GO_TO_LOGIN_COMMAND, new GoToLogInPageCommand());
-		commands.put(CommandName.GO_TO_REGISTRATION_COMMAND, new GoToRegistrationPageCommand());
-		commands.put(CommandName.LOGIN_COMMAND, new LogInCommand());
-		commands.put(CommandName.LOGOUT_COMMAND, new LogOutCommand());
-		commands.put(CommandName.REGISTATION_COMMAND, new RegistrationCommand());
+	private final Map<String, Map<String, Command>> commands = new HashMap<String, Map<String, Command>>();
+	
+	private CommandProvider() {
+		commands.put(ControllerName.MAIN_CONTROLLER_NAME, new HashMap<String, Command>() {
+			{
+				put(CommandName.LOGOUT_COMMAND, LogoutCommand.getInstance());
+			}
+		});
+		commands.put(ControllerName.LOGIN_CONTROLLER_NAME, new HashMap<String, Command>() {
+			{
+				put(CommandName.LOGIN_COMMAND, LoginCommand.getInstance());
+			}
+		});
+		commands.put(ControllerName.REGISTRATION_CONTROLLER_NAME, new HashMap<String, Command>() {
+			{
+				put(CommandName.REGISTRATION_COMMAND, RegistrationCommand.getInstance());
+			}
+		});
+		commands.put(ControllerName.CATALOG_CONTROLLER_NAME, new HashMap<String, Command>() {
+			{
+				put(CommandName.GET_COURSES_COMMAND, GetCoursesCommand.getInstance());
+			}
+		});
 	}
 	
-	public Command getCommand(String commandName) {
-		return commands.get(commandName);
+	public Command getCommand(String controllerName, String commandName) {
+		Map<String, Command> map = commands.get(controllerName);
+		if (map != null) {
+			return map.get(commandName);
+		}
+		return null;
+	}
+	
+	public static CommandProvider getInstance() {
+		return instance;
 	}
 }

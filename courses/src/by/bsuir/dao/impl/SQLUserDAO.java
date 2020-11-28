@@ -19,24 +19,27 @@ public class SQLUserDAO implements UserDAO{
 			"SELECT * FROM users WHERE username = ? AND password = ?";
 	private static final String REGISTRATION_QUERY = 
 			"INSERT INTO users(username, password, name, surname) VALUES(?, ?, ?, ?)";
+	private static final String GET_USER_BY_ID_QUERY = 
+			"SELECT * FROM users WHERE id = ?";
 	
 	@Override
-	public User authentification(String login, String password) throws DAOException {
+	public User authentification(String username, String password) throws DAOException {
 		User user = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet result = null;
+		
 		try {
 			preparedStatement = connection.prepareStatement(AUTHENTIFICATION_QUERY);
-			preparedStatement.setString(1, login);
+			preparedStatement.setString(1, username);
 			preparedStatement.setString(2, SHA256Hasher.hash(password));
 			result = preparedStatement.executeQuery();
 			if (result.next()) {
-				user = new User();
-				user.setId(result.getInt("id"));
-				user.setUsername(result.getString("username"));
-				user.setName(result.getString("name"));
-				user.setSurname(result.getString("surname"));
-				user.setRoleId(result.getInt("roleId"));
+				user = new User(
+						result.getInt("id"),
+						result.getString("username"),
+						result.getString("name"),
+						result.getString("surname"),
+						result.getInt("roleId"));
 			}
 		} catch (SQLException e) {
 			throw new DAOException(e);
@@ -49,6 +52,7 @@ public class SQLUserDAO implements UserDAO{
 	public boolean registration(UserData userData) throws DAOException {
 		PreparedStatement preparedStatement = null;
 		int result = 0;
+		
 		try {
 			preparedStatement = connection.prepareStatement(REGISTRATION_QUERY);
 			preparedStatement.setString(1, userData.getUsername());
@@ -60,5 +64,30 @@ public class SQLUserDAO implements UserDAO{
 			throw new DAOException(e);
 		}
 		return result != 0;
+	}
+	
+	@Override
+	public User getById(int id) throws DAOException {
+		User user = null;
+		ResultSet result = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			preparedStatement = connection.prepareStatement(GET_USER_BY_ID_QUERY);
+			preparedStatement.setInt(1, id);
+			result = preparedStatement.executeQuery();
+			if (result.next()) {
+				user = new User(
+						result.getInt("id"),
+						result.getString("username"),
+						result.getString("name"),
+						result.getString("surname"),
+						result.getInt("roleId"));
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
+		
+		return user;
 	}
 }
